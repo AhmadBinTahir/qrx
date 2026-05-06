@@ -1,0 +1,78 @@
+{
+  "name": "qrx",
+  "version": "0.2.0",
+  "description": "Production-grade extensible QR code library",
+  "main": "dist/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./react": {
+      "types": "./dist/framework/react.d.ts",
+      "import": "./dist/framework/react.js",
+      "require": "./dist/framework/react.cjs"
+    },
+    "./vue": {
+      "types": "./dist/framework/vue.d.ts",
+      "import": "./dist/framework/vue.js",
+      "require": "./dist/framework/vue.cjs"
+    },
+    "./svelte": {
+      "types": "./dist/framework/svelte.d.ts",
+      "import": "./dist/framework/svelte.js",
+      "require": "./dist/framework/svelte.cjs"
+    },
+    "./next": {
+      "types": "./dist/framework/next.d.ts",
+      "import": "./dist/framework/next.js",
+      "require": "./dist/framework/next.cjs"
+    }
+  },
+  "scripts": {
+    "test": "vitest run",
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test:watch": "vitest",
+    "benchmark": "node dist/benchmarks/run.js",
+    "typecheck": "tsc --noEmit",
+    "ci": "npm run typecheck && npm run test && npm run build",
+    "example:basic": "node examples/basic/node-basic.mjs",
+    "example:styled": "node examples/styled/styled-showcase.mjs",
+    "example:batch": "node examples/batch/run-batch.mjs",
+    "docs:dev": "npm --prefix apps/docs run dev",
+    "docs:build": "npm --prefix apps/docs run build",
+    "playground:dev": "npm --prefix apps/playground run dev",
+    "playground:build": "npm --prefix apps/playground run build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "qrx": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "dependencies": {
+    "commander": "^14.0.3",
+    "p-limit": "^7.3.0",
+    "pngjs": "^7.0.0",
+    "qrcode": "^1.5.4",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "@types/pngjs": "^6.0.5",
+    "@types/qrcode": "^1.5.6",
+    "tsup": "^8.5.1",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.5"
+  }
+}

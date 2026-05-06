@@ -1,0 +1,41 @@
+body {
+  margin: 0;
+  font-family: Inter, Segoe UI, Arial, sans-serif;
+  background:
+    radial-gradient(1200px 600px at 0% -10%, #1a2650 0%, transparent 60%),
+    radial-gradient(1200px 700px at 100% 0%, #2a1657 0%, transparent 55%),
+    #070b14;
+  color: #ecf1fb;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.panel {
+  background: rgba(17, 26, 44, 0.86);
+  border: 1px solid rgba(156, 180, 255, 0.24);
+  border-radius: 16px;
+  padding: 18px;
+  margin-bottom: 14px;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  margin-top: 6px;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #3b5083;
+  background: #0b1226;
+  color: #ecf1fb;
+}
+
+textarea {
+  min-height: 110px;
+  resize: vertical;
+}

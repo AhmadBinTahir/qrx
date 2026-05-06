@@ -1,0 +1,17 @@
+[
+  {
+    "type": "url",
+    "data": { "url": "https://example.com/1" },
+    "format": "svg"
+  },
+  {
+    "type": "wifi",
+    "data": { "ssid": "Office", "password": "Password123", "encryption": "WPA" },
+    "format": "svg"
+  },
+  {
+    "type": "payment",
+    "data": { "provider": "upi", "vpa": "name@bank", "amount": 120.5 },
+    "format": "svg"
+  }
+]
