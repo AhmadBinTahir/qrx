@@ -1,6 +1,6 @@
-# qrx docs app
+# qrx Docs/Playground app
 
-Next.js app for:
+Single Next.js app for:
 - documentation front-end
 - built-in advanced studio (`/playground`)
 - sample gallery (`/samples`)
@@ -10,9 +10,11 @@ Next.js app for:
   - `GET /api/qr-preview` (quick preview)
   - `GET /api/generate` (backward-compatible SVG route)
 
+The playground applies scan-safe defaults and returns warnings when a style input is auto-hardened for reliability.
+
 ## Run
 
 ```bash
 npm install
-npm run dev
+npm run docs:dev
 ```

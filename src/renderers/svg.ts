@@ -6,6 +6,11 @@ function isFinder(x: number, y: number, size: number): boolean {
   return inSquare(0, 0) || inSquare(size - 7, 0) || inSquare(0, size - 7);
 }
 
+function isFinderInner(x: number, y: number, size: number): boolean {
+  const inSquare = (sx: number, sy: number) => x >= sx + 2 && x < sx + 5 && y >= sy + 2 && y < sy + 5;
+  return inSquare(0, 0) || inSquare(size - 7, 0) || inSquare(0, size - 7);
+}
+
 function dotShape(x: number, y: number, unit: number, style: NonNullable<QRStyle["dots"]>): string {
   const px = x * unit;
   const py = y * unit;
@@ -17,20 +22,6 @@ function dotShape(x: number, y: number, unit: number, style: NonNullable<QRStyle
   }
   if (style === "classy") return `<circle cx="${px + unit / 2}" cy="${py + unit / 2}" r="${unit * 0.42}" />`;
   return `<rect x="${px}" y="${py}" width="${unit}" height="${unit}" />`;
-}
-
-function cornerShape(size: number, unit: number, style: NonNullable<QRStyle["corners"]>, outerColor: string, innerColor: string): string {
-  const draw = (x: number, y: number) => {
-    const base = 7 * unit;
-    const inner = 3 * unit;
-    const innerOffset = 2 * unit;
-    const rx = style === "square" ? 0 : style === "rounded" ? unit * 0.8 : unit * 1.4;
-    return [
-      `<rect x="${x}" y="${y}" width="${base}" height="${base}" rx="${rx}" fill="none" stroke="${outerColor}" stroke-width="${unit}" />`,
-      `<rect x="${x + innerOffset}" y="${y + innerOffset}" width="${inner}" height="${inner}" rx="${rx * 0.7}" fill="${innerColor}" />`
-    ].join("");
-  };
-  return `${draw(0, 0)}${draw((size - 7) * unit, 0)}${draw(0, (size - 7) * unit)}`;
 }
 
 function normalizeGradient(gradient: QRStyle["gradient"]): GradientStyle | undefined {
@@ -104,7 +95,7 @@ function logoLayer(logo: LogoOptions | undefined, pxSize: number): string {
   `;
 }
 
-export function renderSVG(matrix: boolean[][], styleInput?: QRStyle, logo?: LogoOptions, margin = 2): string {
+export function renderSVG(matrix: boolean[][], styleInput?: QRStyle, logo?: LogoOptions, margin = 4): string {
   const style = mergeTheme(styleInput);
   const size = matrix.length;
   const unit = 10;
@@ -112,13 +103,24 @@ export function renderSVG(matrix: boolean[][], styleInput?: QRStyle, logo?: Logo
   const grad = normalizeGradient(style.gradient);
   const fg = grad ? (grad.type === "radial" ? "url(#qrx-grad-radial)" : "url(#qrx-grad-linear)") : (style.foreground ?? "#000000");
   const bg = style.transparentBackground || style.backgroundStyle?.transparent ? "transparent" : (style.backgroundStyle?.color ?? style.background ?? "#FFFFFF");
-  const modules: string[] = [];
+  const dataModules: string[] = [];
+  const finderOuter: string[] = [];
+  const finderInner: string[] = [];
+  const finderDotStyle: NonNullable<QRStyle["dots"]> =
+    style.corners === "square" ? "square" : style.corners === "rounded" ? "rounded" : "extra-rounded";
 
   for (let y = 0; y < size; y += 1) {
     for (let x = 0; x < size; x += 1) {
       if (!matrix[y][x]) continue;
-      if (isFinder(x, y, size)) continue;
-      modules.push(dotShape(x + margin, y + margin, unit, style.dots ?? "square"));
+      if (isFinder(x, y, size)) {
+        if (isFinderInner(x, y, size)) {
+          finderInner.push(dotShape(x + margin, y + margin, unit, finderDotStyle));
+        } else {
+          finderOuter.push(dotShape(x + margin, y + margin, unit, finderDotStyle));
+        }
+        continue;
+      }
+      dataModules.push(dotShape(x + margin, y + margin, unit, style.dots ?? "square"));
     }
   }
 
@@ -127,8 +129,9 @@ export function renderSVG(matrix: boolean[][], styleInput?: QRStyle, logo?: Logo
     <rect width="100%" height="100%" fill="${bg}" />
     ${style.backgroundStyle?.pattern && style.backgroundStyle.pattern !== "none" ? `<rect width="100%" height="100%" fill="url(#qrx-bg-pattern)" />` : ""}
     ${style.backgroundStyle?.image ? `<image href="${style.backgroundStyle.image.src}" x="0" y="0" width="${pxSize}" height="${pxSize}" opacity="${style.backgroundStyle.image.opacity ?? 0.12}" preserveAspectRatio="xMidYMid slice" />` : ""}
-    <g fill="${fg}" ${style.glow ? `filter="url(#qrx-glow)"` : ""} ${style.blur ? `filter="url(#qrx-blur)"` : ""} ${style.shapeMask && style.shapeMask !== "none" ? `clip-path="url(#qrx-mask)"` : ""}>${modules.join("")}</g>
-    <g>${cornerShape(size + margin * 2, unit, style.corners ?? "square", style.cornerColor ?? style.foreground ?? "#000000", style.eyeInnerColor ?? style.foreground ?? "#000000")}</g>
+    <g fill="${fg}" ${style.glow ? `filter="url(#qrx-glow)"` : ""} ${style.blur ? `filter="url(#qrx-blur)"` : ""} ${style.shapeMask && style.shapeMask !== "none" ? `clip-path="url(#qrx-mask)"` : ""}>${dataModules.join("")}</g>
+    <g fill="${style.cornerColor ?? style.foreground ?? "#000000"}">${finderOuter.join("")}</g>
+    <g fill="${style.eyeInnerColor ?? style.cornerColor ?? style.foreground ?? "#000000"}">${finderInner.join("")}</g>
     ${logoLayer(logo, pxSize)}
   </svg>`;
 }

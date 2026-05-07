@@ -2,6 +2,15 @@
   "name": "qrx",
   "version": "0.2.0",
   "description": "Production-grade extensible QR code library",
+  "author": "Ahmad Bin Tahir",
+  "homepage": "https://github.com/AhmadBinTahir/qrx#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AhmadBinTahir/qrx.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AhmadBinTahir/qrx/issues"
+  },
   "main": "dist/index.js",
   "exports": {
     ".": {
@@ -41,14 +50,15 @@
     "example:basic": "node examples/basic/node-basic.mjs",
     "example:styled": "node examples/styled/styled-showcase.mjs",
     "example:batch": "node examples/batch/run-batch.mjs",
-    "docs:dev": "npm --prefix apps/docs run dev",
-    "docs:build": "npm --prefix apps/docs run build",
-    "playground:dev": "npm --prefix apps/playground run dev",
-    "playground:build": "npm --prefix apps/playground run build"
+    "docs:dev": "npm run dev -w qrx-docs-app",
+    "docs:build": "npm run build -w qrx-docs-app",
+    "apps:build": "npm run docs:build"
   },
+  "workspaces": [
+    "apps/docs"
+  ],
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "type": "module",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",

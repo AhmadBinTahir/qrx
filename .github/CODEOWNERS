@@ -1,0 +1,10 @@
+# Default code ownership
+* @AhmadBinTahir
+
+# Security and governance
+.github/* @AhmadBinTahir
+SECURITY.md @AhmadBinTahir
+
+# Core package
+src/* @AhmadBinTahir
+tests/* @AhmadBinTahir

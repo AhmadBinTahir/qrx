@@ -3,8 +3,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "qrx documentation",
-  description: "Production-grade QR generation docs, samples, and advanced studio"
+  title: "qrx Docs/Playground",
+  description: "Unified docs, samples, and QR studio in one Next.js app"
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -15,7 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <header className="site-header">
             <div className="site-header-inner">
               <Link className="brand" href="/">
-                qrx • docs
+                qrx • Docs/Playground
               </Link>
               <nav className="nav-links">
                 <Link className="nav-pill" href="/">

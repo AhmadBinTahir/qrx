@@ -30,8 +30,7 @@ Production-grade, extensible QR generation library for modern apps, tooling, and
 ├── tests/                 # Unit tests
 ├── examples/              # Runnable examples + sample SVGs
 ├── apps/
-│   ├── docs/              # Unified docs app (Next.js)
-│   └── playground/        # Optional external Vite studio
+│   └── docs/              # Unified Docs/Playground app (Next.js)
 ├── .github/               # CI + issue/PR templates
 ├── README.md
 ├── CONTRIBUTING.md
@@ -96,12 +95,11 @@ Pre-generated SVG samples are available in `examples/samples`.
 
 ## Apps
 
-### Docs app (Next.js)
+### Docs/Playground app (Next.js)
 
 ```bash
-cd apps/docs
 npm install
-npm run dev
+npm run docs:dev
 ```
 
 Available routes:
@@ -111,13 +109,11 @@ Available routes:
 - `/reference` docs reference viewer
 - `/api/qr`, `/api/qr-preview`, `/api/generate` generation endpoints
 
-### Playground app (Vite + React)
-
-```bash
-cd apps/playground
-npm install
-npm run dev
-```
+Studio reliability defaults:
+- quiet zone margin is enforced at 4+ modules
+- ECC defaults to Q (auto H when logo is used)
+- low-contrast / unsafe visual effects are auto-hardened with warnings
+- theme presets: `classic`, `minimal`, `corporate`, `neon`, `midnight`, `ocean`, `sunset`, `forest`
 
 ## Quality & Pipelines
 
@@ -126,6 +122,7 @@ npm run typecheck
 npm test
 npm run build
 npm run ci
+npm run apps:build
 npm run benchmark
 ```
 

@@ -5,7 +5,7 @@ export function renderToCanvas(
   canvas: { width: number; height: number; getContext: (id: "2d") => CanvasRenderingContext2D | null },
   matrix: boolean[][],
   styleInput?: QRStyle,
-  margin = 2
+  margin = 4
 ): void {
   const style = mergeTheme(styleInput);
   const ctx = canvas.getContext("2d");

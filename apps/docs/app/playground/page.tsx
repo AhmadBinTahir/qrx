@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-type Theme = "neon" | "minimal" | "corporate" | "classic";
+type Theme = "neon" | "minimal" | "corporate" | "classic" | "midnight" | "ocean" | "sunset" | "forest";
 type Dot = "square" | "rounded" | "diamond" | "classy" | "extra-rounded";
 type Corner = "square" | "rounded" | "extra-rounded" | "classy";
 type Mask = "none" | "circle" | "heart";
@@ -20,11 +20,95 @@ interface StudioState {
   gradientA: string;
   gradientB: string;
   gradientType: "linear" | "radial";
+  useGradient: boolean;
   logoSrc: string;
   logoSize: number;
   margin: number;
   ecc: ECC;
 }
+
+const themePresets: Record<Theme, Pick<StudioState, "dots" | "corners" | "foreground" | "background" | "gradientA" | "gradientB" | "gradientType" | "useGradient">> = {
+  classic: {
+    dots: "square",
+    corners: "square",
+    foreground: "#000000",
+    background: "#ffffff",
+    gradientA: "#000000",
+    gradientB: "#000000",
+    gradientType: "linear",
+    useGradient: false
+  },
+  minimal: {
+    dots: "square",
+    corners: "rounded",
+    foreground: "#111111",
+    background: "#ffffff",
+    gradientA: "#111111",
+    gradientB: "#111111",
+    gradientType: "linear",
+    useGradient: false
+  },
+  corporate: {
+    dots: "rounded",
+    corners: "rounded",
+    foreground: "#0A2463",
+    background: "#ffffff",
+    gradientA: "#0A2463",
+    gradientB: "#173C8A",
+    gradientType: "linear",
+    useGradient: false
+  },
+  neon: {
+    dots: "rounded",
+    corners: "extra-rounded",
+    foreground: "#00f5d4",
+    background: "#10002b",
+    gradientA: "#00f5d4",
+    gradientB: "#4cc9f0",
+    gradientType: "linear",
+    useGradient: true
+  },
+  midnight: {
+    dots: "rounded",
+    corners: "rounded",
+    foreground: "#ffffff",
+    background: "#0b1020",
+    gradientA: "#ffffff",
+    gradientB: "#cbd5e1",
+    gradientType: "linear",
+    useGradient: false
+  },
+  ocean: {
+    dots: "rounded",
+    corners: "rounded",
+    foreground: "#0b3c5d",
+    background: "#f3faff",
+    gradientA: "#0b3c5d",
+    gradientB: "#1d70a2",
+    gradientType: "linear",
+    useGradient: true
+  },
+  sunset: {
+    dots: "rounded",
+    corners: "extra-rounded",
+    foreground: "#5a189a",
+    background: "#fff7ed",
+    gradientA: "#5a189a",
+    gradientB: "#d0006f",
+    gradientType: "linear",
+    useGradient: true
+  },
+  forest: {
+    dots: "square",
+    corners: "rounded",
+    foreground: "#1b4332",
+    background: "#f1faee",
+    gradientA: "#1b4332",
+    gradientB: "#2d6a4f",
+    gradientType: "linear",
+    useGradient: true
+  }
+};
 
 const starters: Record<StudioState["type"], string> = {
   url: JSON.stringify({ url: "https://example.com" }, null, 2),
@@ -38,18 +122,19 @@ const starters: Record<StudioState["type"], string> = {
 const defaultState: StudioState = {
   type: "url",
   dataRaw: starters.url,
-  theme: "neon",
-  dots: "rounded",
-  corners: "extra-rounded",
+  theme: "classic",
+  dots: themePresets.classic.dots,
+  corners: themePresets.classic.corners,
   mask: "none",
-  foreground: "#111111",
-  background: "#ffffff",
-  gradientA: "#3a0ca3",
-  gradientB: "#4cc9f0",
-  gradientType: "linear",
+  foreground: themePresets.classic.foreground,
+  background: themePresets.classic.background,
+  gradientA: themePresets.classic.gradientA,
+  gradientB: themePresets.classic.gradientB,
+  gradientType: themePresets.classic.gradientType,
+  useGradient: themePresets.classic.useGradient,
   logoSrc: "",
   logoSize: 0.2,
-  margin: 2,
+  margin: 4,
   ecc: "Q"
 };
 
@@ -61,31 +146,57 @@ export default function PlaygroundPage() {
   const [warnings, setWarnings] = useState<string[]>([]);
   const [payload, setPayload] = useState<string>("");
   const [loading, setLoading] = useState(false);
+  const [parseError, setParseError] = useState<string>("");
 
   const requestBody = useMemo(() => {
-    return {
-      type: state.type,
-      data: JSON.parse(state.dataRaw),
-      format: "svg",
-      core: { errorCorrectionLevel: state.ecc, margin: state.margin },
-      style: {
-        theme: state.theme,
-        dots: state.dots,
-        corners: state.corners,
-        shapeMask: state.mask,
-        foreground: state.foreground,
-        background: state.background,
-        gradient: {
-          type: state.gradientType,
-          stops: [state.gradientA, state.gradientB]
-        }
-      },
-      logo: state.logoSrc ? { src: state.logoSrc, size: state.logoSize } : undefined,
-      security: { warnUnsafe: true }
-    };
+    try {
+      const parsedData = JSON.parse(state.dataRaw);
+      return {
+        body: {
+          type: state.type,
+          data: parsedData,
+          format: "svg",
+          core: { errorCorrectionLevel: state.ecc, margin: state.margin },
+          style: {
+            theme: state.theme,
+            dots: state.dots,
+            corners: state.corners,
+            shapeMask: state.mask,
+            foreground: state.foreground,
+            background: state.background,
+            gradient: state.useGradient
+              ? {
+                  type: state.gradientType,
+                  stops: [state.gradientA, state.gradientB]
+                }
+              : undefined
+          },
+          logo: state.logoSrc ? { src: state.logoSrc, size: state.logoSize } : undefined,
+          security: { warnUnsafe: true }
+        },
+        parseError: ""
+      };
+    } catch (error) {
+      return {
+        body: null,
+        parseError: error instanceof Error ? error.message : "Invalid JSON payload"
+      };
+    }
   }, [state]);
 
   useEffect(() => {
+    if (requestBody.body === null) {
+      setParseError(requestBody.parseError);
+      setError("");
+      setSvg("");
+      setScore(null);
+      setWarnings([]);
+      setPayload("");
+      setLoading(false);
+      return;
+    }
+
+    setParseError("");
     const controller = new AbortController();
     const t = setTimeout(async () => {
       try {
@@ -94,7 +205,7 @@ export default function PlaygroundPage() {
         const res = await fetch("/api/qr", {
           method: "POST",
           headers: { "content-type": "application/json" },
-          body: JSON.stringify(requestBody),
+          body: JSON.stringify(requestBody.body),
           signal: controller.signal
         });
         const data = await res.json();
@@ -104,6 +215,7 @@ export default function PlaygroundPage() {
         setWarnings(data.warnings ?? []);
         setPayload(data.payload ?? "");
       } catch (e) {
+        if (e instanceof Error && e.name === "AbortError") return;
         setError(e instanceof Error ? e.message : "Invalid request");
       } finally {
         setLoading(false);
@@ -145,11 +257,21 @@ export default function PlaygroundPage() {
             </div>
             <div className="field">
               <label>Theme</label>
-              <select value={state.theme} onChange={(e) => setState((prev) => ({ ...prev, theme: e.target.value as Theme }))}>
+              <select
+                value={state.theme}
+                onChange={(e) => {
+                  const nextTheme = e.target.value as Theme;
+                  setState((prev) => ({ ...prev, theme: nextTheme, ...themePresets[nextTheme] }));
+                }}
+              >
                 <option value="neon">neon</option>
                 <option value="minimal">minimal</option>
                 <option value="corporate">corporate</option>
                 <option value="classic">classic</option>
+                <option value="midnight">midnight</option>
+                <option value="ocean">ocean</option>
+                <option value="sunset">sunset</option>
+                <option value="forest">forest</option>
               </select>
             </div>
           </div>
@@ -212,6 +334,19 @@ export default function PlaygroundPage() {
               </select>
             </div>
             <div className="field">
+              <label>Use gradient</label>
+              <select
+                value={state.useGradient ? "yes" : "no"}
+                onChange={(e) => setState((prev) => ({ ...prev, useGradient: e.target.value === "yes" }))}
+              >
+                <option value="no">no</option>
+                <option value="yes">yes</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="row-2">
+            <div className="field">
               <label>Shape mask</label>
               <select value={state.mask} onChange={(e) => setState((prev) => ({ ...prev, mask: e.target.value as Mask }))}>
                 <option value="none">none</option>
@@ -235,10 +370,10 @@ export default function PlaygroundPage() {
               <label>Margin</label>
               <input
                 type="number"
-                min={0}
+                min={4}
                 max={8}
                 value={state.margin}
-                onChange={(e) => setState((prev) => ({ ...prev, margin: Number(e.target.value || 2) }))}
+                onChange={(e) => setState((prev) => ({ ...prev, margin: Number(e.target.value || 4) }))}
               />
             </div>
           </div>
@@ -253,7 +388,7 @@ export default function PlaygroundPage() {
               <input
                 type="number"
                 min={0.08}
-                max={0.35}
+                max={0.22}
                 step={0.01}
                 value={state.logoSize}
                 onChange={(e) => setState((prev) => ({ ...prev, logoSize: Number(e.target.value || 0.2) }))}
@@ -264,9 +399,10 @@ export default function PlaygroundPage() {
 
         <article className="card">
           <div className="preview-shell">
+            {parseError ? <p style={{ color: "#ff9ea8", padding: 12 }}>{parseError}</p> : null}
             {error ? <p style={{ color: "#ff9ea8", padding: 12 }}>{error}</p> : null}
             {!error && svg ? <div dangerouslySetInnerHTML={{ __html: svg }} /> : null}
-            {!error && !svg ? <p className="muted">{loading ? "Generating..." : "No preview yet"}</p> : null}
+            {!error && !parseError && !svg ? <p className="muted">{loading ? "Generating..." : "No preview yet"}</p> : null}
           </div>
 
           <div className="section">

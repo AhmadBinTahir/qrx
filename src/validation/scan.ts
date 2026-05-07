@@ -37,6 +37,7 @@ export function buildValidationReport(args: {
   style?: QRStyle;
   errorCorrectionLevel: ErrorCorrectionLevel;
   logoSize?: number;
+  margin?: number;
   warnings?: string[];
 }): ValidationReport {
   const fg = parseHexColor(args.style?.foreground ?? "#000000") ?? [0, 0, 0];
@@ -60,9 +61,16 @@ export function buildValidationReport(args: {
   if (args.style?.backgroundStyle?.image) {
     recommendations.push("Keep background image opacity low and avoid texture behind finder patterns.");
   }
+  if ((args.margin ?? 4) < 4) {
+    recommendations.push("Use at least 4 modules of quiet-zone margin.");
+  }
+  if (args.style?.shapeMask && args.style.shapeMask !== "none") {
+    recommendations.push("Avoid clipping masks for production scan reliability.");
+  }
 
   const warnings = [...(args.warnings ?? [])];
   if (score < 65) warnings.push("Low scan reliability score.");
+  if ((args.margin ?? 4) < 4) warnings.push("Quiet zone margin below recommended minimum (4).");
 
   return {
     readable: score >= 65,

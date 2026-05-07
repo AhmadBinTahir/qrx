@@ -9,7 +9,7 @@ function colorHexToRGB(hex: string): [number, number, number] {
   return [(num >> 16) & 255, (num >> 8) & 255, num & 255];
 }
 
-export function renderPNG(matrix: boolean[][], styleInput?: QRStyle, margin = 2, unit = 10): Buffer {
+export function renderPNG(matrix: boolean[][], styleInput?: QRStyle, margin = 4, unit = 10): Buffer {
   const style = mergeTheme(styleInput);
   const size = matrix.length + margin * 2;
   const pxSize = size * unit;

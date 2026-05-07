@@ -69,4 +69,25 @@ describe("qrx", () => {
     expect(batch).toHaveLength(2);
     expect(batch[0].svg).toContain("<svg");
   });
+
+  it("auto-hardens risky styling for scanner compatibility", async () => {
+    const out = await generateQR({
+      type: "url",
+      data: { url: "https://example.com" },
+      style: {
+        theme: "sunset",
+        foreground: "#999999",
+        background: "#aaaaaa",
+        shapeMask: "heart",
+        transparentBackground: true
+      },
+      logo: { src: "https://example.com/logo.svg", size: 0.35 },
+      core: { margin: 1, errorCorrectionLevel: "L" },
+      format: "svg"
+    });
+
+    expect(out.validation.readable).toBe(true);
+    expect(out.validation.warnings.length).toBeGreaterThan(0);
+    expect(out.svg).toContain("<svg");
+  });
 });

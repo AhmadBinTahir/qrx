@@ -59,7 +59,7 @@ export interface QRStyle {
   shapeMask?: "circle" | "heart" | "none" | string;
   cornerColor?: string;
   eyeInnerColor?: string;
-  theme?: "neon" | "minimal" | "corporate" | "classic";
+  theme?: "neon" | "minimal" | "corporate" | "classic" | "midnight" | "ocean" | "sunset" | "forest";
 }
 
 export interface LogoOptions {

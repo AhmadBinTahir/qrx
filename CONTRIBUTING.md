@@ -5,8 +5,9 @@ Thanks for helping improve qrx.
 ## Development setup
 
 ```bash
-npm install
+npm ci --workspaces --include-workspace-root
 npm run ci
+npm run apps:build
 ```
 
 ## Project standards

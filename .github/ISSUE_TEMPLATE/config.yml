@@ -1,5 +1,8 @@
 blank_issues_enabled: false
 contact_links:
-  - name: qrx discussions
-    url: https://github.com/example/qrx/discussions
-    about: Ask questions and share ideas
+  - name: qrx Discussions
+    url: https://github.com/AhmadBinTahir/qrx/discussions
+    about: Ask questions and share ideas with the community
+  - name: Security reports
+    url: https://github.com/AhmadBinTahir/qrx/security/advisories/new
+    about: Report vulnerabilities privately via GitHub Security Advisories

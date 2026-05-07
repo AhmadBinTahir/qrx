@@ -1,13 +1,11 @@
 # Dependencies
 node_modules/
 apps/docs/node_modules/
-apps/playground/node_modules/
 
 # Build outputs
 dist/
 apps/docs/.next/
 apps/docs/out/
-apps/playground/dist/
 coverage/
 .turbo/
 
