@@ -50,6 +50,8 @@
     "example:basic": "node examples/basic/node-basic.mjs",
     "example:styled": "node examples/styled/styled-showcase.mjs",
     "example:batch": "node examples/batch/run-batch.mjs",
+    "example:samples": "node examples/samples/generate-samples.mjs",
+    "example:all": "npm run example:basic && npm run example:styled && npm run example:batch && npm run example:samples",
     "docs:dev": "npm run dev -w qrx-docs-app",
     "docs:build": "npm run build -w qrx-docs-app",
     "apps:build": "npm run docs:build"

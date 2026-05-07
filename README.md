@@ -72,6 +72,35 @@ const result = await generateQR({
 });
 ```
 
+## API
+
+```ts
+import { createGenerator, generateQR, inspectPayload, validatePayload } from "qrx";
+
+const generator = createGenerator({
+  strict: true,
+  defaults: {
+    validation: { minReadabilityScore: 70 },
+    core: { errorCorrectionLevel: "Q", margin: 4 }
+  }
+});
+
+const single = await generateQR({
+  type: "url",
+  data: { url: "https://qrx.dev" },
+  style: { theme: "ocean" },
+  format: "svg"
+});
+
+const batch = await generator.batch([
+  { type: "wifi", data: { ssid: "Office", password: "Password123", encryption: "WPA" }, format: "svg" },
+  { type: "payment", data: { provider: "upi", vpa: "name@bank", amount: 199 }, format: "svg" }
+]);
+
+const inspection = inspectPayload({ type: "text", data: { text: "hello qrx" } });
+const report = validatePayload("https://qrx.dev");
+```
+
 ## CLI
 
 ```bash
@@ -80,6 +109,8 @@ node dist/cli.js generate --type url --data https://example.com --format svg --o
 node dist/cli.js batch --in examples/batch/batch-jobs.json --out-dir out --concurrency 12
 node dist/cli.js inspect --type text --data hello
 node dist/cli.js validate --payload https://example.com
+node dist/cli.js encrypt --payload "hello" --password pass1234
+node dist/cli.js sign --payload "hello" --secret my-secret
 ```
 
 ## Examples
@@ -89,9 +120,26 @@ npm run build
 npm run example:basic
 npm run example:styled
 npm run example:batch
+npm run example:samples
+# or run everything:
+npm run example:all
 ```
 
-Pre-generated SVG samples are available in `examples/samples`.
+Pre-generated SVG samples for all QR types and design presets are available in `examples/samples`.
+
+### Design gallery
+
+| Classic | Minimal | Corporate | Neon |
+|---|---|---|---|
+| ![classic](examples/samples/design-classic-clean.svg) | ![minimal](examples/samples/design-minimal-rounded.svg) | ![corporate](examples/samples/design-corporate-solid.svg) | ![neon](examples/samples/design-neon-gradient.svg) |
+
+| Midnight | Ocean | Sunset | Forest |
+|---|---|---|---|
+| ![midnight](examples/samples/design-midnight-contrast.svg) | ![ocean](examples/samples/design-ocean-wave.svg) | ![sunset](examples/samples/design-sunset-soft.svg) | ![forest](examples/samples/design-forest-bold.svg) |
+
+### Type showcase (all generated)
+
+`url`, `app`, `text`, `map`, `wifi`, `media`, `document`, `message`, `social`, `video`, `google`, `payment`, `vcard`, `calendar`, `multi-url`, `link-list`, `booking`, `custom`
 
 ## Apps
 

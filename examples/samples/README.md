@@ -1,12 +1,18 @@
 # QR sample assets
 
-These SVGs are pre-generated and ready for preview:
+This folder contains:
 
-- `url-neon.svg`
-- `wifi-corporate.svg`
-- `payment-radial.svg`
+1. **All QR type samples** generated as SVG (`type-*.svg`)
+2. **Design preset showcase** generated as SVG (`design-*.svg`)
 
-Source payload templates are in:
+Generation command:
 
-- `wifi.json`
-- `payment.json`
+```bash
+npm run build
+npm run example:samples
+```
+
+Payload templates that can be reused:
+
+1. `wifi.json`
+2. `payment.json`

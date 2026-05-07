@@ -49,7 +49,25 @@ export function getDefaultProtocolWhitelist(): string[] {
 export function assertPayloadProtocolsAllowed(payload: string, whitelist?: string[]): void {
   const protocolPattern = /\b([a-z][a-z0-9+\-.]*):/gi;
   const allowed = new Set((whitelist ?? getDefaultProtocolWhitelist()).map((p) => p.toLowerCase().replace(":", "")));
-  const ignore = new Set(["begin", "end", "version", "summary", "description", "location", "dtstart", "dtend", "wifi", "signed", "encrypted", "secure_meta"]);
+  const ignore = new Set([
+    "begin",
+    "end",
+    "version",
+    "summary",
+    "description",
+    "location",
+    "dtstart",
+    "dtend",
+    "wifi",
+    "signed",
+    "encrypted",
+    "secure_meta",
+    "n",
+    "fn",
+    "org",
+    "email",
+    "url"
+  ]);
   const found = new Set<string>();
   let match: RegExpExecArray | null;
   while ((match = protocolPattern.exec(payload))) {
