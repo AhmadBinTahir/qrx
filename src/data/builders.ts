@@ -190,6 +190,48 @@ const paymentBuilder: TypeBuilder<
   }
 };
 
+const couponBuilder: TypeBuilder<{
+  code: string;
+  campaign?: string;
+  description?: string;
+  redeemUrl?: string;
+  expiresAt?: string;
+  discount?: { type: "percent" | "amount"; value: number };
+}> = {
+  validateAndBuild(input) {
+    const parsed = z.object({
+      code: z.string().min(1).max(80),
+      campaign: z.string().max(120).optional(),
+      description: z.string().max(240).optional(),
+      redeemUrl: z.string().url().optional(),
+      expiresAt: z.string().datetime().optional(),
+      discount: z.object({
+        type: z.enum(["percent", "amount"]),
+        value: z.number().positive()
+      }).optional()
+    }).parse(input);
+
+    if (parsed.discount?.type === "percent" && parsed.discount.value > 100) {
+      throw new Error("Percent discount cannot exceed 100.");
+    }
+
+    const payload = {
+      code: parsed.code,
+      campaign: parsed.campaign,
+      description: parsed.description,
+      redeemUrl: parsed.redeemUrl ? sanitizeUrl(parsed.redeemUrl) : undefined,
+      expiresAt: parsed.expiresAt ? new Date(parsed.expiresAt).toISOString() : undefined,
+      discount: parsed.discount
+    };
+
+    if (payload.redeemUrl) {
+      assertProtocolAllowed(payload.redeemUrl);
+    }
+
+    return `COUPON::${JSON.stringify(payload)}`;
+  }
+};
+
 const vcardBuilder: TypeBuilder<{ firstName: string; lastName?: string; org?: string; email?: string; phone?: string; url?: string }> = {
   validateAndBuild(input) {
     const parsed = z.object({
@@ -291,6 +333,7 @@ const registry: Record<QRType, TypeBuilder<unknown>> = {
   video: videoBuilder as TypeBuilder<unknown>,
   google: googleBuilder as TypeBuilder<unknown>,
   payment: paymentBuilder as TypeBuilder<unknown>,
+  coupon: couponBuilder as TypeBuilder<unknown>,
   vcard: vcardBuilder as TypeBuilder<unknown>,
   calendar: calendarBuilder as TypeBuilder<unknown>,
   "multi-url": multiUrlBuilder as TypeBuilder<unknown>,

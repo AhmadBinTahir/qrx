@@ -19,6 +19,16 @@ const allTypes = [
   { type: "video", data: { platform: "youtube", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" } },
   { type: "google", data: { service: "forms", url: "https://docs.google.com/forms/d/e/example/viewform" } },
   { type: "payment", data: { provider: "upi", vpa: "name@bank", amount: 199, name: "Qrx Pro" } },
+  {
+    type: "coupon",
+    data: {
+      code: "MEGA-40",
+      campaign: "summer-launch",
+      redeemUrl: "https://qrx.dev/redeem",
+      expiresAt: "2026-12-31T23:59:59Z",
+      discount: { type: "percent", value: 40 }
+    }
+  },
   { type: "vcard", data: { firstName: "Ahmad", lastName: "Tahir", org: "Qrx", email: "ahmad@example.com", phone: "+923001234567", url: "https://qrx.dev" } },
   { type: "calendar", data: { title: "Qrx Demo", start: "2026-06-01T09:00:00Z", end: "2026-06-01T10:00:00Z", location: "Online", description: "Product walkthrough" } },
   {

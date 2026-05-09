@@ -15,7 +15,7 @@ Production-grade, extensible QR generation library for modern apps, tooling, and
 ## Highlights
 
 - ISO-compliant QR generation with version/mask/ECC control
-- Rich payload builders (URL, Wi-Fi, payment, social, vCard, calendar, and more)
+- Rich payload builders (URL, Wi-Fi, payment, coupon, social, vCard, calendar, and more)
 - Advanced design system (dots/corners, gradients, masks, logos, themes, effects)
 - Security pipeline (validation, unsafe detection, signing, encryption, expiry metadata)
 - Batch + streaming generation APIs
@@ -139,7 +139,7 @@ Pre-generated SVG samples for all QR types and design presets are available in `
 
 ### Type showcase (all generated)
 
-`url`, `app`, `text`, `map`, `wifi`, `media`, `document`, `message`, `social`, `video`, `google`, `payment`, `vcard`, `calendar`, `multi-url`, `link-list`, `booking`, `custom`
+`url`, `app`, `text`, `map`, `wifi`, `media`, `document`, `message`, `social`, `video`, `google`, `payment`, `coupon`, `vcard`, `calendar`, `multi-url`, `link-list`, `booking`, `custom`
 
 ## Apps
 

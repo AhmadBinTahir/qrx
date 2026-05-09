@@ -9,7 +9,7 @@ type Mask = "none" | "circle" | "heart";
 type ECC = "L" | "M" | "Q" | "H";
 
 interface StudioState {
-  type: "url" | "text" | "wifi" | "payment" | "social" | "custom";
+  type: "url" | "text" | "wifi" | "payment" | "coupon" | "social" | "custom";
   dataRaw: string;
   theme: Theme;
   dots: Dot;
@@ -115,6 +115,17 @@ const starters: Record<StudioState["type"], string> = {
   text: JSON.stringify({ text: "Hello from qrx" }, null, 2),
   wifi: JSON.stringify({ ssid: "Office", password: "Password123", encryption: "WPA" }, null, 2),
   payment: JSON.stringify({ provider: "upi", vpa: "name@bank", amount: 199 }, null, 2),
+  coupon: JSON.stringify(
+    {
+      code: "MEGA-40",
+      campaign: "summer-launch",
+      redeemUrl: "https://example.com/redeem",
+      expiresAt: "2026-12-31T23:59:59Z",
+      discount: { type: "percent", value: 40 }
+    },
+    null,
+    2
+  ),
   social: JSON.stringify({ platform: "instagram", usernameOrUrl: "github" }, null, 2),
   custom: JSON.stringify({ payload: "custom://payload" }, null, 2)
 };
@@ -251,6 +262,7 @@ export default function PlaygroundPage() {
                 <option value="text">Text</option>
                 <option value="wifi">Wi-Fi</option>
                 <option value="payment">Payment</option>
+                <option value="coupon">Coupon</option>
                 <option value="social">Social</option>
                 <option value="custom">Custom</option>
               </select>

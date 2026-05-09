@@ -70,6 +70,25 @@ describe("qrx", () => {
     expect(batch[0].svg).toContain("<svg");
   });
 
+  it("builds coupon payloads with strong validation", async () => {
+    const out = await generateQR({
+      type: "coupon",
+      data: {
+        code: "MEGA-40",
+        campaign: "summer-launch",
+        redeemUrl: "https://example.com/redeem",
+        expiresAt: "2026-12-31T23:59:59Z",
+        discount: { type: "percent", value: 40 }
+      },
+      style: { theme: "corporate" },
+      format: "svg"
+    });
+
+    expect(out.svg).toContain("<svg");
+    expect(out.payload).toContain("COUPON::");
+    expect(out.payload).toContain("\"code\":\"MEGA-40\"");
+  });
+
   it("auto-hardens risky styling for scanner compatibility", async () => {
     const out = await generateQR({
       type: "url",

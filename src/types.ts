@@ -11,6 +11,7 @@ export type QRType =
   | "video"
   | "google"
   | "payment"
+  | "coupon"
   | "vcard"
   | "calendar"
   | "multi-url"

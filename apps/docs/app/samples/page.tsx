@@ -40,6 +40,25 @@ const sampleConfigs = [
       },
       format: "svg" as const
     }
+  },
+  {
+    name: "Coupon Promo",
+    options: {
+      type: "coupon" as const,
+      data: {
+        code: "MEGA-40",
+        campaign: "summer-launch",
+        redeemUrl: "https://example.com/redeem",
+        expiresAt: "2026-12-31T23:59:59Z",
+        discount: { type: "percent" as const, value: 40 }
+      },
+      style: {
+        theme: "sunset" as const,
+        dots: "rounded" as const,
+        corners: "extra-rounded" as const
+      },
+      format: "svg" as const
+    }
   }
 ];
 
