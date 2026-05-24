@@ -41,7 +41,7 @@ Production-grade, extensible QR generation library for modern apps, tooling, and
 ## Installation
 
 ```bash
-npm i qrx
+npm i qrx // Use Manual Installation for Now. Clone the Repo and then run the commands. Package isn't released yet.
 ```
 
 ## Quick Start
