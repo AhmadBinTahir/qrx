@@ -11,7 +11,7 @@
   "dependencies": {
     "next": "^15.4.0",
     "react": "^19.2.0",
-    "react-dom": "^19.2.0",
+    "react-dom": "^19.2.8",
     "qrx": "file:../.."
   },
   "devDependencies": {
