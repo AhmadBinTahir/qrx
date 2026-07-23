@@ -10,13 +10,13 @@
   },
   "dependencies": {
     "next": "^15.4.0",
-    "react": "^19.2.0",
+    "react": "^19.2.8",
     "react-dom": "^19.2.0",
     "qrx": "file:../.."
   },
   "devDependencies": {
     "@types/node": "^25.6.0",
-    "@types/react": "^19.2.2",
+    "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.2",
     "typescript": "^6.0.3"
   }
